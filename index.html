@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>To Do List Workshop</title>
+<style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+h2{
+    text-align:center;
+}
+#header{
+    display: flex;
+    flex-direction: row;
+    width:50vw;
+    margin-left:25vw;
+}
+input {
+    flex-grow:2;
+    padding: 0 10px;
+}
+#addBtn {
+  padding: 10px;
+  cursor: pointer;
+}
+#myList{
+    display: flex;
+    flex-direction: column;
+    width:50vw;
+    margin-left:25vw;
+    padding-left:0px;
+}
+li{
+    background-color:#eeeeee;
+    padding:10px;
+    list-style-type: none;
+    cursor: pointer;
+}
+/* Set all odd list items to a different color (zebra-stripes) */
+li:nth-child(odd) {
+  background-color: #e4e4e4;
+}
+li:hover {
+  background: #cecece;
+}
+li.checked {
+  text-decoration: line-through;
+  background: #888;
+  color: #666;
+}
+.close{
+    float: right;
+    cursor: pointer;
+}
+
+</style>
+<body>
+<h2>My To Do List</h2>
+<div id="header">
+    <input type="text" id="listInput" placeholder="To Do...">
+    <button onclick="newList()" id="addBtn">Add</button>
+</div>
+<ul id="myList"></ul>
+</body>
+<script>
+
+</script>
