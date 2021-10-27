@@ -104,6 +104,17 @@ function newList(){
   }
 }
 
+function fillList(){
+  for(var i=0; i<localStorage.length; i++){
+    const li = document.createElement('li');
+    const id = localStorage.key(i);
+    const inputValue = localStorage.getItem(id);
+    const text = document.createTextNode(inputValue);
+    li.appendChild(text);
+
+
+  }
+}
 const list = document.querySelector('ul');
 list.addEventListener('click',function(event){
   if(event.target.tagName === 'LI'){
