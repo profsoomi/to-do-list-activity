@@ -76,13 +76,17 @@ const close = document.getElementsByClassName('close');
 function newList(){
   const li = document.createElement('li');
   const inputValue = document.getElementById('listInput').value;
-  console.log(inputValue);  
+  // console.log(inputValue);  
   const text = document.createTextNode(inputValue);
   if(inputValue === ''){
     alert('nothing there');
   }else{
   li.appendChild(text);
   document.getElementById('myList').appendChild(li);
+  const liId = 'list-'+inputValue;
+  li.id = liId;
+  localStorage.setItem(liId, inputValue);
+  console.log(localStorage.getItem(liId));
   }
   const span = document.createElement('SPAN');
   const x = document.createTextNode('\u2716');
