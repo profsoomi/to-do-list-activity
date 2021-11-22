@@ -63,6 +63,13 @@ li.checked {
 <ul id="myList"></ul>
 
 </body>
+<!-- https://jquery.com/download/ -->
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<!-- <script src="js/jquery-3.6.0.min.js"></script> -->
+
 <script>
   /* 
   1. when 'add' button is clicked, run newList() function
@@ -71,83 +78,66 @@ li.checked {
   4. toggle a 'checked' class to strike-through element when checked
 
 */
-const close = document.getElementsByClassName('close');
-const storage = {};
+
 function newList(){
-  const li = document.createElement('li');
-  const inputValue = document.getElementById('listInput').value;
-  // console.log(inputValue);  
-  const text = document.createTextNode(inputValue);
+  const inputValue = $("#listInput").val();
   if(inputValue === ''){
     alert('nothing there');
   }else{
-  li.appendChild(text);
-  document.getElementById('myList').appendChild(li);
-  const liId = 'list-'+inputValue;
-  li.id = liId;
-  localStorage.setItem(liId, inputValue);
-  console.log(localStorage.getItem(liId));
-  }
-  const span = document.createElement('SPAN');
-  const x = document.createTextNode('\u2716');
-  span.className='close';
-  span.appendChild(x);
-  li.appendChild(span);
+    const li = $("<li></li>")
+    const liId = 'list-'+inputValue;
+    $("#myList").append(li.text(inputValue).attr('id', liId));
+    localStorage.setItem(liId, inputValue);
 
-  document.getElementById('listInput').value = '';
-  
-  // for(i=0; i<close.length; i++){
-  //   close[i].onclick = function(){
-  //     const div = this.parentElement;
-  //     div.style.display = 'none';
-  //   }
-  // }
-  closeItems();
-}
-function closeItems(){
-  for(i=0; i<close.length; i++){
-    close[i].onclick = function(){
-      const div = this.parentElement;
-      div.style.display = 'none';
-      const thisId = div.id;
-      localStorage.removeItem(thisId);
-    }
+    li.append($("<span>").addClass('close').append(document.createTextNode('\u2716')));
+    $("#listInput").val('');
   }
 }
+
+$(document).on("click", '.close', function() {
+  $(this).parent().css('display','none');
+  const thisId = $(this).parent().attr('id');
+  localStorage.removeItem(thisId);
+});
+
 function fillList(){
-  for(var i=0; i<localStorage.length; i++){
-    const li = document.createElement('li');
-    const id = localStorage.key(i);
-    const inputValue = localStorage.getItem(id);
-    const text = document.createTextNode(inputValue);
-    li.appendChild(text);
-    li.id = id;
-    const span = document.createElement('SPAN');
-    const x = document.createTextNode('\u2716');
-    span.className='close';
-    span.appendChild(x);
-    li.appendChild(span);
-    document.getElementById('myList').appendChild(li);
-    closeItems();
-  }
+  $.each(localStorage, function(key, value){
+
+    const id = key;
+    const inputValue = value;
+
+    $("#myList")
+      .append($("<li></li>")
+        .text(inputValue)
+        .attr('id', 'list-'+inputValue)
+        .append($("<span>")
+          .addClass('close')
+          .append(document
+            .createTextNode('\u2716'))));
+  });
 }
 
-const list = document.querySelector('ul');
-list.addEventListener('click',function(event){
-  if(event.target.tagName === 'LI'){
-    event.target.classList.toggle('checked');
-  }
-},false);
+$(document).on("click", 'li', function() {
+  $(this).toggleClass('checked');
+});
 
-const input = document.getElementById('listInput');
-input.addEventListener('keyup',function(event){
-  if(event.keyCode === 13){
-    event.preventDefault();
-    document.getElementById('addBtn').click();
-  }
-}, false);
-
-window.onload = function(){
+$('#listInput').on('keypress',function(e) {
+    if(e.which == 13) {
+      newList();
+    }
+});
+$(document).ready(function() {
   fillList();
-}
+})
+
+// $(document).on("click", '.close', function() {
+//   $(this).parent().css('display','none');
+//   const thisId = $(this).parent().attr('id');
+//   localStorage.removeItem(thisId);
+// }).on("click", 'li', function() {
+//   $(this).toggleClass('checked');
+// }).ready(function() {
+//   fillList();
+// });
+
 </script>
