@@ -71,73 +71,83 @@ li.checked {
 <!-- <script src="js/jquery-3.6.0.min.js"></script> -->
 
 <script>
-  /* 
-  1. when 'add' button is clicked, run newList() function
-  2. add a <li> element with whatever is inside the text input
-  3. create a close button with the li element
-  4. toggle a 'checked' class to strike-through element when checked
-
-*/
-
+//add an item to the list
 function newList(){
-  const inputValue = $("#listInput").val();
+  const li = document.createElement('li');
+  const inputValue = document.getElementById('listInput').value;
+  const text = document.createTextNode(inputValue);
   if(inputValue === ''){
     alert('nothing there');
   }else{
-    const li = $("<li></li>")
-    const liId = 'list-'+inputValue;
-    $("#myList").append(li.text(inputValue).attr('id', liId));
-    localStorage.setItem(liId, inputValue);
+  li.appendChild(text);
+  document.getElementById('myList').appendChild(li);
+  const liId = 'list-'+inputValue;
+  li.id = liId;
+  localStorage.setItem(liId, inputValue);
+  console.log(localStorage.getItem(liId));
+  }
+  const span = document.createElement('SPAN');
+  const x = document.createTextNode('\u2716');
+  span.className='close';
+  span.appendChild(x);
+  li.appendChild(span);
 
-    li.append($("<span>").addClass('close').append(document.createTextNode('\u2716')));
-    $("#listInput").val('');
+  document.getElementById('listInput').value = '';
+  closeItems();
+}
+
+//add click function to 'x' button to remove item
+const close = document.getElementsByClassName('close');
+function closeItems(){
+  for(i=0; i<close.length; i++){
+    close[i].onclick = function(){
+      const div = this.parentElement;
+      div.style.display = 'none';
+      const thisId = div.id;
+      localStorage.removeItem(thisId);
+    }
   }
 }
 
-$(document).on("click", '.close', function() {
-  $(this).parent().css('display','none');
-  const thisId = $(this).parent().attr('id');
-  localStorage.removeItem(thisId);
-});
-
+//add items to the list based on local storage
 function fillList(){
-  $.each(localStorage, function(key, value){
-
-    const id = key;
-    const inputValue = value;
-
-    $("#myList")
-      .append($("<li></li>")
-        .text(inputValue)
-        .attr('id', 'list-'+inputValue)
-        .append($("<span>")
-          .addClass('close')
-          .append(document
-            .createTextNode('\u2716'))));
-  });
+  for(var i=0; i<localStorage.length; i++){
+    const li = document.createElement('li');
+    const id = localStorage.key(i);
+    const inputValue = localStorage.getItem(id);
+    const text = document.createTextNode(inputValue);
+    li.appendChild(text);
+    li.id = id;
+    const span = document.createElement('SPAN');
+    const x = document.createTextNode('\u2716');
+    span.className='close';
+    span.appendChild(x);
+    li.appendChild(span);
+    document.getElementById('myList').appendChild(li);
+    closeItems();
+  }
 }
 
-$(document).on("click", 'li', function() {
-  $(this).toggleClass('checked');
-});
+//toggle class 'checked' to strikethrough items on click
+const list = document.querySelector('ul');
+list.addEventListener('click',function(event){
+  if(event.target.tagName === 'LI'){
+    event.target.classList.toggle('checked');
+  }
+},false);
 
-$('#listInput').on('keypress',function(e) {
-    if(e.which == 13) {
-      newList();
-    }
-});
-$(document).ready(function() {
+//enable enter key function
+const input = document.getElementById('listInput');
+input.addEventListener('keyup',function(event){
+  if(event.keyCode === 13){
+    event.preventDefault();
+    document.getElementById('addBtn').click();
+  }
+}, false);
+
+//call function as soon as page loads
+window.onload = function(){
   fillList();
-})
-
-// $(document).on("click", '.close', function() {
-//   $(this).parent().css('display','none');
-//   const thisId = $(this).parent().attr('id');
-//   localStorage.removeItem(thisId);
-// }).on("click", 'li', function() {
-//   $(this).toggleClass('checked');
-// }).ready(function() {
-//   fillList();
-// });
+}
 
 </script>
